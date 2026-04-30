@@ -8,4 +8,28 @@
 
 body {
   -webkit-font-smoothing: antialiased;
+  background-color: #F5F2EB;
+}
+
+/* 申告書フォーム風の罫線 */
+.form-rule {
+  border-bottom: 1px solid #C8BEA8;
+}
+
+/* 朱印スタンプ風のバッジ */
+.stamp-ring {
+  border: 2px solid #B91C1C;
+  border-radius: 50%;
+  padding: 2px 8px;
+  color: #B91C1C;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: inline-block;
+  transform: rotate(-8deg);
+}
+
+/* 申告書の枠線 */
+.form-box {
+  border: 1px solid #C8BEA8;
+  background: #FAF8F4;
 }

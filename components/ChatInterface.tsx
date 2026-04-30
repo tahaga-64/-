@@ -20,7 +20,7 @@ const LOCALSTORAGE_KEY = 'tax_anon_count'
 const TABS: { mode: InputMode; emoji: string; label: string }[] = [
   { mode: 'photo', emoji: '📸', label: '写真' },
   { mode: 'scan', emoji: '📄', label: 'スキャン' },
-  { mode: 'chat', emoji: '💬', label: 'チャット' },
+  { mode: 'chat', emoji: '✏️', label: 'チャット' },
 ]
 
 export default function ChatInterface() {
@@ -29,7 +29,7 @@ export default function ChatInterface() {
       id: 'welcome',
       role: 'assistant',
       content:
-        'こんにちは！確定申告のお手伝いをします 📋\n\n書類の写真を撮るか、PDFをアップロードするか、直接質問してください。\n\n例：「源泉徴収票の見方を教えて」「医療費控除はどこに書く？」',
+        'こんにちは！確定申告のお手伝いをします 📋\n\n書類の写真を撮るか、PDFをアップロードするか、直接ご質問ください。\n\n例：「源泉徴収票の見方を教えて」「医療費控除はどこに書く？」',
     },
   ])
   const [inputMode, setInputMode] = useState<InputMode>('chat')
@@ -147,36 +147,45 @@ export default function ChatInterface() {
   }
 
   return (
-    <div className="flex flex-col h-svh max-w-2xl mx-auto bg-gray-50">
-      {/* Header */}
-      <header className="bg-[#2563EB] text-white px-4 py-3 flex items-center gap-3 shadow-sm flex-shrink-0">
-        <div className="flex-1">
-          <h1 className="text-base font-bold leading-none">確定申告AI</h1>
-          <p className="text-xs text-blue-200 mt-0.5">書類記入サポート</p>
+    <div className="flex flex-col h-svh max-w-2xl mx-auto bg-paper">
+      {/* ヘッダー：申告書の表紙風 */}
+      <header className="bg-tax-navy text-white flex-shrink-0">
+        {/* 上部オレンジライン */}
+        <div className="h-1 bg-tax-orange w-full" />
+        <div className="px-4 py-3 flex items-center gap-3">
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              {/* 申告書番号風バッジ */}
+              <span className="text-[10px] border border-white/40 px-1.5 py-0.5 rounded text-white/70 font-mono tracking-widest">
+                申告AI
+              </span>
+            </div>
+            <h1 className="text-base font-bold mt-0.5 tracking-wide">確定申告サポート</h1>
+          </div>
+          <PlanBadge plan={null} remaining={remaining} />
         </div>
-        <PlanBadge plan={null} remaining={remaining} />
       </header>
 
-      {/* Mode Tabs */}
-      <div className="flex border-b bg-white flex-shrink-0">
+      {/* モードタブ：申告書の区分欄風 */}
+      <div className="flex bg-paper-dark border-b border-tax-rule flex-shrink-0">
         {TABS.map(({ mode, emoji, label }) => (
           <button
             key={mode}
             onClick={() => setInputMode(mode)}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-medium transition-colors ${
+            className={`flex-1 flex items-center justify-center gap-1 py-2.5 text-sm font-medium transition-colors border-r last:border-r-0 border-tax-rule ${
               inputMode === mode
-                ? 'text-[#2563EB] border-b-2 border-[#2563EB]'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-tax-orange text-white'
+                : 'text-tax-ink/70 hover:bg-paper hover:text-tax-ink'
             }`}
           >
-            <span>{emoji}</span>
-            {label}
+            <span className="text-base">{emoji}</span>
+            <span className="text-xs">{label}</span>
           </button>
         ))}
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 min-h-0">
+      {/* メッセージ一覧 */}
+      <div className="flex-1 overflow-y-auto px-4 py-4 min-h-0 bg-paper-texture">
         {messages.map((msg) => (
           <MessageBubble
             key={msg.id}
@@ -186,11 +195,11 @@ export default function ChatInterface() {
           />
         ))}
         {isLoading && messages[messages.length - 1]?.content === '' && (
-          <div className="flex items-center gap-2 text-gray-500 text-sm pl-10 mb-4">
+          <div className="flex items-center gap-2 text-tax-ink/50 text-sm pl-10 mb-4">
             <span className="flex gap-1">
-              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:0ms]" />
-              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:150ms]" />
-              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:300ms]" />
+              <span className="w-1.5 h-1.5 bg-tax-orange rounded-full animate-bounce [animation-delay:0ms]" />
+              <span className="w-1.5 h-1.5 bg-tax-orange rounded-full animate-bounce [animation-delay:150ms]" />
+              <span className="w-1.5 h-1.5 bg-tax-orange rounded-full animate-bounce [animation-delay:300ms]" />
             </span>
             書類を読み取っています...
           </div>
@@ -198,18 +207,24 @@ export default function ChatInterface() {
         <div ref={bottomRef} />
       </div>
 
-      {/* Input area */}
-      <div className="bg-white border-t px-4 py-3 flex-shrink-0">
+      {/* 入力エリア：記入欄風 */}
+      <div className="bg-paper-light border-t-2 border-tax-orange px-4 py-3 flex-shrink-0">
+        {/* 欄のラベル（申告書の記入欄ラベル風） */}
+        <div className="text-[10px] text-tax-ink/50 font-mono tracking-widest mb-2 flex items-center gap-1">
+          <span className="w-2 h-2 bg-tax-orange inline-block" />
+          {inputMode === 'chat' ? '質問記入欄' : '書類添付欄'}
+        </div>
+
         {(inputMode === 'photo' || inputMode === 'scan') && (
           <FileUploader mode={inputMode} onFileSelect={setFile} selectedFile={file} />
         )}
         {file && (
-          <div className="text-xs text-blue-600 mb-2 flex items-center gap-1">
+          <div className="text-xs text-tax-orange mb-2 flex items-center gap-1 bg-tax-orange-light px-2 py-1 rounded">
             <span>📎</span>
             <span className="truncate max-w-[200px]">{file.name}</span>
             <button
               onClick={() => setFile(null)}
-              className="ml-1 text-gray-400 hover:text-gray-600"
+              className="ml-auto text-tax-ink/40 hover:text-tax-ink"
               aria-label="ファイルを削除"
             >
               ✕
@@ -224,16 +239,16 @@ export default function ChatInterface() {
             onKeyDown={handleKeyDown}
             placeholder={
               inputMode === 'chat'
-                ? '質問を入力してください... (Enterで送信)'
-                : '書類についての質問やメモ（省略可）'
+                ? '例：医療費控除はどこに記入しますか？'
+                : '書類についての補足や質問（省略可）'
             }
             rows={2}
-            className="flex-1 resize-none rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/40 focus:border-blue-400"
+            className="flex-1 resize-none bg-white border border-tax-rule rounded px-3 py-2.5 text-sm text-tax-ink placeholder:text-tax-ink/30 focus:outline-none focus:border-tax-orange focus:ring-1 focus:ring-tax-orange/30"
           />
           <button
             onClick={handleSubmit}
             disabled={isLoading || (!text.trim() && !file)}
-            className="bg-[#2563EB] text-white rounded-xl p-3 disabled:opacity-40 hover:bg-blue-700 transition-colors flex-shrink-0"
+            className="bg-tax-orange text-white rounded px-4 py-3 text-sm font-bold disabled:opacity-30 hover:bg-tax-orange-dark transition-colors flex-shrink-0 tracking-wider"
             aria-label="送信"
           >
             {isLoading ? (
@@ -242,17 +257,14 @@ export default function ChatInterface() {
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
             ) : (
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M22 2L11 13" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M22 2L15 22 11 13 2 9l20-7z" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              '送信'
             )}
           </button>
         </div>
         {anonCount > 0 && anonCount < ANON_LIMIT && (
-          <p className="text-xs text-gray-400 mt-1.5 text-center">
+          <p className="text-[11px] text-tax-ink/40 mt-1.5 text-center font-mono">
             残り{remaining}回 ·{' '}
-            <a href="/auth" className="text-blue-500 hover:underline">
+            <a href="/auth" className="text-tax-orange hover:underline">
               ログインで5回/月まで無料
             </a>
           </p>

@@ -29,11 +29,12 @@ export default function FileUploader({ mode, onFileSelect, selectedFile }: Props
 
   if (mode === 'photo') {
     return (
-      <label className="block border-2 border-dashed border-blue-200 rounded-xl p-6 text-center cursor-pointer hover:border-blue-400 transition-colors mb-2">
-        <span className="text-3xl block mb-2">📸</span>
-        <span className="text-sm text-blue-600 font-medium">
+      <label className="block border border-dashed border-tax-orange/60 rounded bg-tax-orange-light p-5 text-center cursor-pointer hover:border-tax-orange transition-colors mb-2">
+        <span className="text-2xl block mb-1.5">📸</span>
+        <span className="text-sm text-tax-orange font-medium">
           {selectedFile ? selectedFile.name : 'タップして撮影 / 写真を選択'}
         </span>
+        <p className="text-xs text-tax-orange/70 mt-1">書類を近づけて撮影してください</p>
         <input
           type="file"
           accept="image/*"
@@ -48,18 +49,18 @@ export default function FileUploader({ mode, onFileSelect, selectedFile }: Props
   return (
     <div
       {...getRootProps()}
-      className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-colors mb-2 ${
+      className={`border border-dashed rounded p-5 text-center cursor-pointer transition-colors mb-2 ${
         isDragActive
-          ? 'border-blue-500 bg-blue-50'
-          : 'border-gray-200 hover:border-blue-300'
+          ? 'border-tax-orange bg-tax-orange-light'
+          : 'border-tax-rule bg-paper-light hover:border-tax-orange/60'
       }`}
     >
       <input {...getInputProps()} />
-      <span className="text-3xl block mb-2">📄</span>
+      <span className="text-2xl block mb-1.5">📄</span>
       {selectedFile ? (
-        <p className="text-sm text-blue-600 font-medium">{selectedFile.name}</p>
+        <p className="text-sm text-tax-orange font-medium">{selectedFile.name}</p>
       ) : (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-tax-ink/60">
           PDFや画像をドラッグ＆ドロップ
           <br />
           <span className="text-xs">または タップして選択（最大4MB）</span>

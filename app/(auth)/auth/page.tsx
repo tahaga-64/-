@@ -17,9 +17,7 @@ export default function AuthPage() {
     const supabase = createSupabaseBrowser()
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: {
-        emailRedirectTo: `${location.origin}/chat`,
-      },
+      options: { emailRedirectTo: `${location.origin}/chat` },
     })
 
     if (error) {
@@ -31,50 +29,71 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen bg-paper flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <a href="/" className="text-2xl font-bold text-[#2563EB]">確定申告AI</a>
-          <p className="text-gray-500 text-sm mt-1">書類記入サポート</p>
+        {/* 申告書の表紙風ヘッダー */}
+        <div className="bg-tax-navy text-white rounded-t overflow-hidden">
+          <div className="h-1 bg-tax-orange" />
+          <div className="px-6 py-5 text-center">
+            <p className="text-[10px] text-white/50 tracking-widest font-mono mb-1">KAKUTEISHINKOKU AI</p>
+            <h1 className="text-lg font-bold tracking-wide">ログイン / 新規登録</h1>
+          </div>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-          <h1 className="text-lg font-bold text-center mb-1">ログイン / 新規登録</h1>
-          <p className="text-sm text-gray-500 text-center mb-6">
-            メールアドレスを入力するとログインリンクを送信します
+
+        {/* フォーム本体：申告書の記入欄風 */}
+        <div className="bg-paper-light border border-tax-rule border-t-0 rounded-b px-6 py-6">
+          <p className="text-xs text-tax-ink/60 mb-5 leading-relaxed border-b border-tax-rule pb-4">
+            メールアドレスを入力するとログインリンクを送信します。
+            パスワードは不要です。
           </p>
 
           {sent ? (
-            <div className="text-center">
-              <div className="text-4xl mb-3">✅</div>
-              <p className="text-sm text-green-600 font-medium">メールを送信しました</p>
-              <p className="text-xs text-gray-500 mt-2">
-                受信ボックスを確認して、リンクをクリックしてください
+            <div className="text-center py-4">
+              <div className="w-14 h-14 rounded-full border-2 border-tax-stamp flex items-center justify-center mx-auto mb-3">
+                <span className="text-tax-stamp text-2xl">✓</span>
+              </div>
+              <p className="text-sm font-bold text-tax-ink mb-1">メールを送信しました</p>
+              <p className="text-xs text-tax-ink/50 leading-relaxed">
+                受信ボックスを確認して、<br />リンクをクリックしてください
               </p>
             </div>
           ) : (
             <form onSubmit={handleMagicLink} className="space-y-4">
               {error && (
-                <p className="text-xs text-red-500 bg-red-50 px-3 py-2 rounded-lg">{error}</p>
+                <p className="text-xs text-tax-stamp bg-tax-stamp-light px-3 py-2 rounded border border-tax-stamp/20">
+                  {error}
+                </p>
               )}
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="your@email.com"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/40 focus:border-blue-400"
-              />
+              <div>
+                <label className="text-[10px] text-tax-ink/50 font-mono tracking-widest block mb-1">
+                  メールアドレス
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="w-full bg-white border border-tax-rule rounded px-3 py-3 text-sm text-tax-ink placeholder:text-tax-ink/30 focus:outline-none focus:border-tax-orange focus:ring-1 focus:ring-tax-orange/30"
+                />
+              </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#2563EB] text-white rounded-xl py-3 text-sm font-medium disabled:opacity-50 hover:bg-blue-700 transition-colors"
+                className="w-full bg-tax-orange text-white rounded py-3 text-sm font-bold disabled:opacity-50 hover:bg-tax-orange-dark transition-colors tracking-wider"
               >
                 {loading ? '送信中...' : 'ログインリンクを送る'}
               </button>
             </form>
           )}
+
+          <div className="mt-5 pt-4 border-t border-tax-rule text-center">
+            <a href="/" className="text-xs text-tax-ink/40 hover:text-tax-orange transition-colors">
+              ← トップページに戻る
+            </a>
+          </div>
         </div>
-        <p className="text-xs text-gray-400 text-center mt-4">
+        <p className="text-[10px] text-tax-ink/30 text-center mt-3">
           登録することで利用規約とプライバシーポリシーに同意したものとみなします
         </p>
       </div>
