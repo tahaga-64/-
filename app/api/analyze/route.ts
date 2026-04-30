@@ -5,6 +5,13 @@ export const runtime = 'nodejs'
 export const maxDuration = 60
 
 export async function POST(req: NextRequest) {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json(
+      { error: 'ANTHROPIC_API_KEY が設定されていません。.env.local を確認してください。' },
+      { status: 503 }
+    )
+  }
+
   try {
     const contentLength = req.headers.get('content-length')
     if (contentLength && parseInt(contentLength) > 4.5 * 1024 * 1024) {
