@@ -55,6 +55,7 @@ export default function OnboardingPage() {
 
   async function handleFinish() {
     setSaving(true)
+    try {
     const supabase = createSupabaseBrowser()
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
@@ -70,6 +71,7 @@ export default function OnboardingPage() {
         onboarding_completed: true,
       })
     }
+    } catch { /* Supabase未設定の場合はスキップ */ }
     router.push('/dashboard')
   }
 

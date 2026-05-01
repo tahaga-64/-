@@ -14,16 +14,19 @@ export default function AuthPage() {
     setLoading(true)
     setError('')
 
-    const supabase = createSupabaseBrowser()
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${location.origin}/chat` },
-    })
-
-    if (error) {
-      setError(error.message)
-    } else {
-      setSent(true)
+    try {
+      const supabase = createSupabaseBrowser()
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: `${location.origin}/chat` },
+      })
+      if (error) {
+        setError(error.message)
+      } else {
+        setSent(true)
+      }
+    } catch {
+      setError('Supabase が設定されていません。.env.local に NEXT_PUBLIC_SUPABASE_URL を追加してください。')
     }
     setLoading(false)
   }

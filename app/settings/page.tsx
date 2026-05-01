@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Navigation from '@/components/Navigation'
-import { createSupabaseBrowser } from '@/lib/supabase'
+import { createSupabaseBrowser, isSupabaseConfigured } from '@/lib/supabase'
 
 export default function SettingsPage() {
   const router = useRouter()
@@ -12,11 +12,12 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
+    if (!isSupabaseConfigured()) return
     createSupabaseBrowser().auth.getUser().then(({ data }) => setUser(data.user))
   }, [])
 
   async function handleSignOut() {
-    await createSupabaseBrowser().auth.signOut()
+    if (isSupabaseConfigured()) await createSupabaseBrowser().auth.signOut()
     router.push('/')
   }
 
