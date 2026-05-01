@@ -1,6 +1,6 @@
 {
-  "name": "tax-doc-saas",
-  "version": "0.1.0",
+  "name": "moneywise-jp",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
+    "@google/generative-ai": "^0.24.0",
     "@stripe/stripe-js": "^5.7.0",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
@@ -20,6 +21,7 @@
     "react-dom": "^18",
     "react-dropzone": "^14.3.8",
     "react-markdown": "^9.0.3",
+    "resend": "^4.0.0",
     "remark-gfm": "^4.0.1",
     "stripe": "^17.7.0"
   },

@@ -1,224 +1,190 @@
 import Link from 'next/link'
 
+const FEATURES = [
+  { emoji: '🧮', title: '損得シミュレーター', desc: '所得税・住民税・手取り額をリアルタイム計算。翌年の国保料も同時表示。', href: '/simulator/tax' },
+  { emoji: '✅', title: '申告要否判定', desc: '3問に答えるだけで確定申告が必要か即判定。住民税の落とし穴も警告。', href: '/checker' },
+  { emoji: '💬', title: 'AI税務相談', desc: 'Gemini × Claude の二重AIで、「なぜそうなるか」まで丁寧に回答。', href: '/chat' },
+  { emoji: '🔍', title: '控除チェッカー', desc: '使えるのに申告していない控除を自動発見。金額まで提示。', href: '/checker/deductions' },
+  { emoji: '💼', title: '副業バレ防止', desc: '20万円ルールの正しい理解と住民税「普通徴収」の設定手順を解説。', href: '/guide/side-job' },
+  { emoji: '📅', title: 'ライフイベント別ガイド', desc: '結婚・転職・退職・介護など、状況別の税金手続きを一覧。', href: '/guide/life-events' },
+]
+
+const AGE_ISSUES = [
+  { age: '20代', issues: ['副業が会社にバレる恐怖', '20万円ルールの誤解', '国民年金免除を知らず未納'] },
+  { age: '30代', issues: ['複数収入源の整理が煩雑', 'ふるさと納税の併用ミス', '配偶者控除の上限変更に追いつけない'] },
+  { age: '40代', issues: ['住宅ローン控除×経費の矛盾', 'iDeCoの出口戦略がわからない', '法人化の損益分岐点が不明'] },
+  { age: '50代', issues: ['退職金とiDeCoの同年受取で税負担激増', '親の介護費を控除合算できるか不明', '相続・贈与の事前準備が不明'] },
+  { age: '60代+', issues: ['申告が必要か不要かの判断が困難', '住民税申告を知らずに追徴課税', '加給年金・給付金の未申請'] },
+]
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-paper font-sans">
       {/* ナビ */}
       <nav className="bg-tax-navy text-white sticky top-0 z-10">
         <div className="h-1 bg-tax-orange" />
-        <div className="flex items-center justify-between px-4 py-3 max-w-3xl mx-auto">
+        <div className="flex items-center justify-between px-4 py-3 max-w-4xl mx-auto">
           <div>
-            <p className="text-[9px] text-white/40 font-mono tracking-widest leading-none">KAKUTEISHINKOKU</p>
-            <span className="font-bold text-white tracking-wide text-base leading-tight">確定申告AI</span>
+            <p className="text-[9px] text-white/40 font-mono tracking-widest leading-none">MONEYWISE JP</p>
+            <span className="font-bold text-white tracking-wide text-base leading-tight">MoneyWise JP</span>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/pricing" className="text-xs text-white/60 hover:text-white transition-colors">
-              料金
-            </Link>
-            <Link
-              href="/auth"
-              className="text-xs border border-white/30 text-white px-3 py-1.5 hover:border-tax-orange hover:text-tax-orange transition-colors rounded-sm"
-            >
+            <Link href="/pricing" className="text-xs text-white/60 hover:text-white">料金</Link>
+            <Link href="/dashboard" className="text-xs text-white/60 hover:text-white">ダッシュボード</Link>
+            <Link href="/auth" className="text-xs border border-white/30 text-white px-3 py-1.5 hover:border-tax-orange hover:text-tax-orange transition-colors">
               ログイン
             </Link>
           </div>
         </div>
       </nav>
 
-      {/* ヒーロー：確定申告書の表紙風 */}
-      <section className="max-w-3xl mx-auto px-4 pt-12 pb-10">
-        {/* 申告書番号風の装飾 */}
+      {/* ヒーロー */}
+      <section className="max-w-4xl mx-auto px-4 pt-12 pb-10">
         <div className="flex items-center gap-3 mb-6">
           <div className="h-px flex-1 bg-tax-rule" />
-          <span className="text-[10px] text-tax-ink/40 font-mono tracking-widest">
-            令和7年分 確定申告サポート
-          </span>
+          <span className="text-[10px] text-tax-ink/40 font-mono tracking-widest">2025年度 税制改正対応済み</span>
           <div className="h-px flex-1 bg-tax-rule" />
         </div>
 
         <div className="flex flex-col md:flex-row gap-8 items-start">
           <div className="flex-1">
-            {/* 様式タイトル風 */}
             <div className="border-l-4 border-tax-orange pl-4 mb-6">
               <h1 className="text-3xl font-bold text-tax-ink leading-tight">
-                確定申告、<br />もう迷わない。
+                税金・年金・保険、<br />全部まとめて解決。
               </h1>
             </div>
-            <p className="text-tax-ink/60 text-sm leading-relaxed mb-6">
-              書類を写真に撮るか、質問するだけ。<br />
-              AIが専門用語ゼロで、ステップごとに案内します。
+            <p className="text-tax-ink/60 text-sm leading-relaxed mb-2">
+              日本の社会人が抱える税金・年金・社会保険のあらゆる疑問を<br />
+              AIシミュレーター＋専門ガイドで徹底サポート。
             </p>
-            <Link
-              href="/chat"
-              className="inline-flex items-center gap-2 bg-tax-orange text-white px-7 py-3.5 text-sm font-bold hover:bg-tax-orange-dark transition-colors tracking-wider"
-            >
-              無料で試す（3回）
-              <span>→</span>
-            </Link>
-            <p className="text-[11px] text-tax-ink/40 mt-2 font-mono">登録不要・クレジットカード不要</p>
+            <p className="text-xs text-tax-stamp font-bold mb-6">
+              ⚡ freee・マネフォにない「損得シミュレーター」搭載
+            </p>
+            <div className="flex gap-3 flex-wrap">
+              <Link href="/simulator/tax"
+                className="inline-flex items-center gap-2 bg-tax-orange text-white px-7 py-3.5 text-sm font-bold hover:bg-tax-orange-dark transition-colors tracking-wider shadow-lg shadow-tax-orange/20">
+                損得を今すぐ計算 →
+              </Link>
+              <Link href="/chat"
+                className="inline-flex items-center gap-2 border border-tax-navy text-tax-navy px-6 py-3.5 text-sm font-medium hover:bg-tax-navy hover:text-white transition-colors">
+                AIに相談する
+              </Link>
+            </div>
+            <p className="text-[11px] text-tax-ink/40 mt-2 font-mono">登録不要・3回まで無料</p>
           </div>
 
-          {/* 申告書フォーム風のイメージカード */}
-          <div className="w-full md:w-52 border border-tax-rule bg-paper-light p-4 flex-shrink-0">
-            <div className="border-b border-tax-rule pb-2 mb-3">
-              <p className="text-[9px] text-tax-ink/40 font-mono tracking-widest">確定申告書 B</p>
-              <p className="text-xs font-bold text-tax-ink mt-0.5">所得税及び</p>
-              <p className="text-xs font-bold text-tax-ink">復興特別所得税の申告</p>
+          {/* 申告書風カード */}
+          <div className="w-full md:w-56 border border-tax-rule bg-paper-light flex-shrink-0">
+            <div className="bg-tax-navy text-white px-3 py-2.5">
+              <p className="text-[9px] font-mono tracking-widest text-white/50">QUICK CALC</p>
+              <p className="text-xs font-bold">損得シミュレーター</p>
             </div>
-            {/* ダミーフォームフィールド */}
-            {['氏名', '住所', '生年月日', '電話番号'].map((label) => (
-              <div key={label} className="mb-2">
-                <p className="text-[9px] text-tax-ink/40 font-mono">{label}</p>
-                <div className="h-5 border-b border-tax-rule mt-0.5 bg-white/60" />
+            {[
+              { label: '年収', value: '600万円' },
+              { label: '所得税', value: '約32万円' },
+              { label: '住民税', value: '約37万円' },
+              { label: '手取り', value: '約469万円' },
+              { label: '翌年国保', value: '約47万円/年' },
+            ].map(({ label, value }) => (
+              <div key={label} className="flex items-center justify-between px-3 py-2 border-b border-tax-rule last:border-b-0">
+                <p className="text-[10px] text-tax-ink/50 font-mono">{label}</p>
+                <p className="text-xs font-bold text-tax-ink font-mono">{value}</p>
               </div>
             ))}
-            {/* AI サポート表示 */}
-            <div className="mt-3 pt-2 border-t border-tax-rule">
-              <div className="flex items-center gap-1">
-                <div className="w-3 h-3 rounded-full border border-tax-stamp flex items-center justify-center">
-                  <span className="text-tax-stamp text-[7px]">AI</span>
-                </div>
-                <p className="text-[9px] text-tax-ink/50">AIが記入方法を案内</p>
-              </div>
+            <div className="px-3 py-2.5 bg-tax-orange-light">
+              <p className="text-[10px] text-tax-orange font-bold">iDeCo追加で+2.8万円節税</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 区切り線 */}
       <div className="border-t border-tax-rule" />
 
-      {/* 課題セクション */}
-      <section className="bg-paper-dark px-4 py-10">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-7">
-            <p className="text-[10px] text-tax-ink/40 font-mono tracking-widest mb-1">PROBLEM</p>
-            <h2 className="text-lg font-bold text-tax-ink">こんな悩み、ありませんか？</h2>
+      {/* 年齢別課題 */}
+      <section className="bg-paper-dark px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <p className="text-[10px] text-tax-ink/40 font-mono tracking-widest mb-1">AGE-SPECIFIC ISSUES</p>
+            <h2 className="text-lg font-bold text-tax-ink">年齢層別の「よくある落とし穴」</h2>
+          </div>
+          <div className="grid gap-3 md:grid-cols-5">
+            {AGE_ISSUES.map(({ age, issues }) => (
+              <div key={age} className="border border-tax-rule bg-paper-light">
+                <div className="bg-tax-navy text-white px-3 py-2 text-center">
+                  <p className="text-xs font-bold">{age}</p>
+                </div>
+                <ul className="px-3 py-3 space-y-1.5">
+                  {issues.map(issue => (
+                    <li key={issue} className="text-[11px] text-tax-ink/60 flex gap-1">
+                      <span className="text-tax-stamp flex-shrink-0">▸</span>
+                      {issue}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="border-t border-tax-rule" />
+
+      {/* 機能一覧 */}
+      <section className="px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <p className="text-[10px] text-tax-ink/40 font-mono tracking-widest mb-1">FEATURES</p>
+            <h2 className="text-lg font-bold text-tax-ink">6つの解決機能</h2>
           </div>
           <div className="grid gap-3 md:grid-cols-3">
-            {[
-              { no: '01', text: '書類の専門用語がわからない', icon: '📝' },
-              { no: '02', text: 'どの欄に何を書くか迷う', icon: '🤔' },
-              { no: '03', text: '税理士に頼むほどでもないが不安', icon: '😰' },
-            ].map(({ no, text, icon }) => (
-              <div key={no} className="bg-paper-light border border-tax-rule p-4">
-                <div className="flex items-start gap-3">
-                  <span className="text-[10px] text-tax-orange font-mono font-bold mt-0.5">{no}</span>
-                  <div>
-                    <span className="text-xl block mb-1">{icon}</span>
-                    <p className="text-sm text-tax-ink leading-relaxed">{text}</p>
-                  </div>
+            {FEATURES.map(({ emoji, title, desc, href }) => (
+              <Link key={href} href={href}
+                className="border border-tax-rule bg-paper-light px-4 py-4 hover:border-tax-orange hover:bg-tax-orange-light transition-colors group flex gap-3 items-start">
+                <span className="text-2xl flex-shrink-0">{emoji}</span>
+                <div>
+                  <p className="font-bold text-sm text-tax-ink group-hover:text-tax-orange transition-colors">{title}</p>
+                  <p className="text-xs text-tax-ink/50 mt-1 leading-relaxed">{desc}</p>
                 </div>
-              </div>
+              </Link>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="border-t border-tax-rule" />
-
-      {/* 使い方セクション */}
-      <section className="px-4 py-10">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-7">
-            <p className="text-[10px] text-tax-ink/40 font-mono tracking-widest mb-1">HOW TO USE</p>
-            <h2 className="text-lg font-bold text-tax-ink">使い方は3ステップ</h2>
-          </div>
-          <div className="space-y-4">
-            {[
-              { step: 'STEP 1', icon: '📸', title: '書類を撮影 or アップロード', desc: '確定申告書、源泉徴収票、医療費領収書など何でも対応' },
-              { step: 'STEP 2', icon: '✏️', title: 'AIに質問するだけ', desc: '「この欄には何を書けばいい？」「この数字はどこに入力する？」' },
-              { step: 'STEP 3', icon: '✅', title: 'ステップごとに案内', desc: '専門用語ゼロで、1つずつわかりやすく教えます' },
-            ].map(({ step, icon, title, desc }) => (
-              <div key={step} className="flex gap-4 items-stretch border border-tax-rule bg-paper-light">
-                {/* 左側：申告書の欄番号風 */}
-                <div className="bg-tax-navy text-white w-14 flex-shrink-0 flex flex-col items-center justify-center py-4">
-                  <span className="text-[9px] font-mono tracking-widest text-white/50 block text-center leading-none mb-1">
-                    {step.split(' ')[0]}
-                  </span>
-                  <span className="text-lg font-bold">{step.split(' ')[1]}</span>
-                </div>
-                <div className="flex items-center gap-3 px-4 py-3">
-                  <span className="text-2xl">{icon}</span>
-                  <div>
-                    <p className="font-bold text-sm text-tax-ink">{title}</p>
-                    <p className="text-xs text-tax-ink/50 mt-0.5 leading-relaxed">{desc}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="border-t border-tax-rule" />
-
-      {/* 料金ティーザー */}
-      <section className="bg-paper-dark px-4 py-10">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-6">
-            <p className="text-[10px] text-tax-ink/40 font-mono tracking-widest mb-1">PRICING</p>
-            <h2 className="text-lg font-bold text-tax-ink">シンプルな料金プラン</h2>
-          </div>
-          <div className="grid grid-cols-3 gap-3 mb-5">
-            {[
-              { label: '無料', price: '¥0', note: '5回/月', accent: false },
-              { label: 'スタンダード', price: '¥980', note: '/月・無制限', accent: true },
-              { label: 'シーズンパス', price: '¥2,980', note: '/3ヶ月', accent: false },
-            ].map((p) => (
-              <div
-                key={p.label}
-                className={`border p-3 text-center ${
-                  p.accent
-                    ? 'border-tax-orange bg-tax-orange-light'
-                    : 'border-tax-rule bg-paper-light'
-                }`}
-              >
-                <p className="text-[9px] text-tax-ink/50 font-mono mb-1">{p.label}</p>
-                <p className={`font-bold text-sm ${p.accent ? 'text-tax-orange' : 'text-tax-ink'}`}>
-                  {p.price}
-                </p>
-                <p className="text-[9px] text-tax-ink/40 mt-0.5">{p.note}</p>
-              </div>
-            ))}
-          </div>
-          <div className="text-center">
-            <Link href="/pricing" className="text-sm text-tax-orange hover:underline font-mono">
-              詳しいプランを見る →
-            </Link>
           </div>
         </div>
       </section>
 
       {/* CTA */}
       <section className="bg-tax-navy text-white px-4 py-14 text-center">
-        <div className="max-w-3xl mx-auto">
-          <p className="text-[10px] text-white/40 font-mono tracking-widest mb-3">START FOR FREE</p>
+        <div className="max-w-2xl mx-auto">
+          <p className="text-[10px] text-white/40 font-mono tracking-widest mb-3">GET STARTED</p>
           <h2 className="text-xl font-bold mb-2">今すぐ無料で試してみる</h2>
           <div className="w-12 h-0.5 bg-tax-orange mx-auto mb-4" />
-          <p className="text-white/50 text-sm mb-7">登録不要・3回まで無料</p>
-          <Link
-            href="/chat"
-            className="inline-flex items-center gap-2 bg-tax-orange text-white px-8 py-4 text-sm font-bold hover:bg-tax-orange-dark transition-colors tracking-wider"
-          >
-            はじめる →
-          </Link>
+          <p className="text-white/50 text-sm mb-7">登録不要・3回まで無料 / 有料プランで無制限</p>
+          <div className="flex gap-4 justify-center flex-wrap">
+            <Link href="/simulator/tax"
+              className="inline-flex items-center gap-2 bg-tax-orange text-white px-7 py-4 text-sm font-bold hover:bg-tax-orange-dark transition-colors tracking-wider">
+              損得計算を始める →
+            </Link>
+            <Link href="/chat"
+              className="inline-flex items-center gap-2 border border-white/30 text-white px-7 py-4 text-sm hover:border-white transition-colors">
+              AIに相談する
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* フッター */}
       <footer className="bg-tax-ink text-white/40 px-4 py-8 text-center">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <p className="text-[10px] leading-relaxed font-mono mb-4">
-            【免責事項】本サービスは情報提供を目的としており、税務・法律アドバイスではありません。
-            正確な申告は税理士または国税庁のウェブサイトでご確認ください。
+            【免責事項】本サービスは情報提供を目的としており、税務・法律・ファイナンシャルアドバイスではありません。
+            正確な申告・年金・保険については、税理士・社会保険労務士または各官公庁のウェブサイトでご確認ください。
           </p>
           <div className="flex items-center justify-center gap-5 text-[11px] mb-3">
-            <Link href="/pricing" className="hover:text-tax-orange transition-colors">料金プラン</Link>
-            <Link href="/auth" className="hover:text-tax-orange transition-colors">ログイン</Link>
-            <Link href="/chat" className="hover:text-tax-orange transition-colors">チャット</Link>
+            <Link href="/dashboard" className="hover:text-tax-orange">ダッシュボード</Link>
+            <Link href="/simulator/tax" className="hover:text-tax-orange">シミュレーター</Link>
+            <Link href="/checker" className="hover:text-tax-orange">申告判定</Link>
+            <Link href="/pricing" className="hover:text-tax-orange">料金</Link>
           </div>
-          <p className="text-[10px] text-white/20 font-mono">© 2025 確定申告AI</p>
+          <p className="text-[10px] text-white/20 font-mono">© 2025 MoneyWise JP</p>
         </div>
       </footer>
     </div>

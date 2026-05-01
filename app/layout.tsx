@@ -10,8 +10,9 @@ const notoSansJP = Noto_Sans_JP({
 })
 
 export const metadata: Metadata = {
-  title: '確定申告AI | 書類サポートアシスタント',
-  description: '書類の写真を撮るか質問するだけ。AIが確定申告をやさしくステップごとに案内します。',
+  title: 'MoneyWise JP | 税金・年金・保険をかんたん解決',
+  description:
+    '確定申告・税金・年金・社会保険のあらゆる疑問をAIが解決。損得シミュレーター・申告要否判定・控除チェッカーで日本の社会人を徹底サポート。',
 }
 
 export const viewport: Viewport = {
@@ -23,7 +24,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja" className={notoSansJP.variable}>
-      <body className="font-sans bg-gray-50 text-gray-900 antialiased">
+      <body className="font-sans bg-paper text-tax-ink antialiased">
         {children}
       </body>
     </html>
